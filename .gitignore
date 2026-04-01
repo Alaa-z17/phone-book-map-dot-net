@@ -1,0 +1,70 @@
+## Ignore Visual Studio temporary files, build results, and crashes
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
+
+# Mono auto generated files
+mono_crash.*
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww]in32/
+[Aa]rm/
+[Aa]rm64/
+bsearch/
+gsearch/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio 2015/2017/2019/2022 cache/options directory
+.vs/
+# Uncomment if you have tasks that create the project's static files in wwwroot
+#wwwroot/
+
+# Visual Studio Code file and directories
+.vscode/
+
+# NuGet Packages
+*.nupkg
+# The packages folder can be ignored because of Package Restore
+**/[Pp]ackages/*
+# except build/
+!**/[Pp]ackages/build/
+# uncomment if using NuGet2
+# **/packages/*
+
+# MSTest resolve assembly loading playlists
+*.playlist
+
+# Rider (JetBrains) files
+.idea/
+*.sln.iml
+
+# Backup and ReSharper files
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Local History for Visual Studio
+.LocalHistory/
+
+# Windows image analyses cache
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
