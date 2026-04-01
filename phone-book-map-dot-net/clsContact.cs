@@ -1,13 +1,15 @@
-﻿public class clsContact
+﻿#nullable enable
+
+public class clsContact
 {
     private static int _idCounter = 1;
 
     public int ID { get; private set; }
 
-    // Use = default! to tell the compiler: "I will initialize this later, don't worry."
-    public string Name { get; set; } = default!;
-    public string PhoneNumber { get; set; } = default!;
-    public string Email { get; set; } = default!;
+    // These properties are required; they will be set in the constructor.
+    public string Name { get; set; }
+    public string PhoneNumber { get; set; }
+    public string Email { get; set; }
     public DateTime AddedDate { get; set; }
 
     public clsContact(string name, string phoneNumber, string email)
