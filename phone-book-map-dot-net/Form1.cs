@@ -43,13 +43,19 @@ namespace phone_book_map_dot_net
                 return;
             }
 
-            var filtered = _engine.GetAllContacts()
-                .Where(c => c.Name.IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) >= 0 ||
-                            c.PhoneNumber.IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) >= 0 ||
-                            c.Email.IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) >= 0)
-                .ToList();
+            // Direct search using Map (O(log n)) - very fast!
+            var foundContact = _engine.FindContact(searchTerm);
 
-            dgvContacts.DataSource = filtered;
+            if (foundContact != null)
+            {
+                dgvContacts.DataSource = new List<clsContact> { foundContact };
+            }
+            else
+            {
+                // If not found by exact name, we can fall back to a general search 
+                // or just show an empty list
+                dgvContacts.DataSource = null;
+            }
         }
 
         private void ClearInputFields()
