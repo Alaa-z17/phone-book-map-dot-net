@@ -1,12 +1,13 @@
 #nullable enable
 
+using PhoneBookMapApp.Core;
+using PhoneBookMapApp.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using PhoneBookMapApp.Core;
 
 namespace phone_book_map_dot_net
 {
@@ -17,16 +18,22 @@ namespace phone_book_map_dot_net
         public Form1()
         {
             InitializeComponent();
-            LoadSampleData();
+
+           // LoadSampleData();
+
+            // Load from file instead of Sample Data
+            var data = clsFileHelper.LoadData();
+            if (data != null) _engine.LoadContacts(data);
+
             RefreshContactsGrid();
         }
 
-        private void LoadSampleData()
-        {
-            _engine.AddContact(new clsContact("Alice Johnson", "555-1234", "alice@example.com"));
-            _engine.AddContact(new clsContact("Bob Smith", "555-5678", "bob@example.com"));
-            _engine.AddContact(new clsContact("Charlie Brown", "555-8765", "charlie@example.com"));
-        }
+        //private void LoadSampleData()
+        //{
+        //    _engine.AddContact(new clsContact("Alice Johnson", "555-1234", "alice@example.com"));
+        //    _engine.AddContact(new clsContact("Bob Smith", "555-5678", "bob@example.com"));
+        //    _engine.AddContact(new clsContact("Charlie Brown", "555-8765", "charlie@example.com"));
+        //}
 
         private void RefreshContactsGrid()
         {
@@ -134,17 +141,20 @@ namespace phone_book_map_dot_net
         {
             if (!ValidateInputs()) return;
 
-            var newContact = new clsContact(txtName.Text.Trim(), txtPhone.Text.Trim(), txtEmail.Text.Trim());
+            // Get the next valid ID from the engine before creating the object
+            int nextId = _engine.GetNextID();
+            var newContact = new clsContact(nextId, txtName.Text.Trim(), txtPhone.Text.Trim(), txtEmail.Text.Trim());
 
             if (_engine.AddContact(newContact))
             {
                 RefreshContactsGrid();
                 ClearInputFields();
-                MessageBox.Show("Contact added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                clsFileHelper.SaveData(_engine.GetAllContacts());
+                MessageBox.Show("Contact added successfully!", "Success");
             }
             else
             {
-                MessageBox.Show("A contact with this name already exists.", "Duplicate", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("A contact with this name already exists.", "Duplicate");
             }
         }
 
@@ -181,7 +191,8 @@ namespace phone_book_map_dot_net
             if (!originalName.Equals(txtName.Text.Trim(), StringComparison.OrdinalIgnoreCase))
             {
                 _engine.DeleteContact(originalName);
-                var updatedContact = new clsContact(txtName.Text.Trim(), txtPhone.Text.Trim(), txtEmail.Text.Trim());
+
+                var updatedContact = new clsContact(selectedContact.ID, txtName.Text.Trim(), txtPhone.Text.Trim(), txtEmail.Text.Trim());
                 _engine.AddContact(updatedContact);
             }
             else
@@ -193,7 +204,11 @@ namespace phone_book_map_dot_net
 
             RefreshContactsGrid();
             ClearInputFields();
+
+            clsFileHelper.SaveData(_engine.GetAllContacts());
             MessageBox.Show("Contact updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+       
         }
 
         private void BtnDelete_Click(object? sender, EventArgs e)
@@ -219,6 +234,7 @@ namespace phone_book_map_dot_net
                 _engine.DeleteContact(selectedContact.Name);
                 RefreshContactsGrid();
                 ClearInputFields();
+                clsFileHelper.SaveData(_engine.GetAllContacts());
                 MessageBox.Show("Contact deleted.", "Deleted", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
